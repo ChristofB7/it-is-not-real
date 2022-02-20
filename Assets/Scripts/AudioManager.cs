@@ -8,12 +8,15 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    public Sound[] sounds;
+    public AudioMixer audioMixer;
+    [SerializeField] AudioSource themeSource;
+    [SerializeField] AudioClip themeClip;
+
     public static AudioManager instance;
     // Start is called before the first frame update
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -24,34 +27,15 @@ public class AudioManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-
-        foreach (Sound s in sounds)
-        {
-            s.audioSource = gameObject.AddComponent<AudioSource>();
-            s.audioSource.clip = s.clip;
-
-            s.audioSource.volume = s.volume;
-            s.audioSource.pitch = s.pitch;
-            s.audioSource.loop = s.loop;
-        }
     }
 
     private void Start()
     {
-        Play("Theme");
+        float volume = PlayerPrefs.GetFloat("volume", 0.5f);
+        audioMixer.SetFloat("volume", Mathf.Log10(volume) * 20);
+        themeSource.Play();
+         
     }
 
-    public void Play(string name)
-    {
-        Sound s = System.Array.Find(sounds, Sound => Sound.name == name);
-        if(s == null)
-        {
-            Debug.LogWarning("Sound: " + name + " not found");
-            return;
-        }
-
-        s.audioSource.Play();
-
-    }
 
 }
