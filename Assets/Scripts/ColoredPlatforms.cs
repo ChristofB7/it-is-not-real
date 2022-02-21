@@ -24,7 +24,6 @@ public class ColoredPlatforms : MonoBehaviour
 
     IEnumerator SwapColors()
     {
-        Debug.Log("Changing Colors");
         for(; ; )
         {
             spriteCounter = (spriteCounter+1)%sprites.Length;

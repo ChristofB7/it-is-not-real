@@ -72,6 +72,7 @@ namespace TarodevController {
 
         [Header("COLLISION")] [SerializeField] private Bounds _characterBounds;
         [SerializeField] public LayerMask _groundLayer;
+        [SerializeField] private LayerMask _oneWay;
         [SerializeField] private int _detectorCount = 3;
         [SerializeField] private float _detectionRayLength = 0.1f;
         [SerializeField] [Range(0.1f, 0.3f)] private float _rayBuffer = 0.1f; // Prevents side detectors hitting the ground
@@ -90,6 +91,7 @@ namespace TarodevController {
             // Ground
             LandingThisFrame = false;
             var groundedCheck = RunDetection(_raysDown);
+            groundedCheck = HappyGoLucky(_raysDown);
             if (_colDown && !groundedCheck) _timeLeftGrounded = Time.time; // Only trigger when first leaving
             else if (!_colDown && groundedCheck)
             {
@@ -116,6 +118,13 @@ namespace TarodevController {
             {
                 return EvaluateRayPositions(range).Any(point => Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer));
             }
+            bool HappyGoLucky(RayRange range)
+            {
+                bool groundLayerMask = EvaluateRayPositions(range).Any(point => Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer));
+                bool oneWayLayerMask = EvaluateRayPositions(range).Any(point => Physics2D.Raycast(point, range.Dir, _detectionRayLength, _oneWay));
+                return groundedCheck || oneWayLayerMask;
+            }
+
         }
 
         private void CalculateRayRanged()
