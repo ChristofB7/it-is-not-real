@@ -71,13 +71,13 @@ namespace TarodevController {
         #region Collisions
 
         [Header("COLLISION")] [SerializeField] private Bounds _characterBounds;
-        [SerializeField] private LayerMask _groundLayer;
+        [SerializeField] public LayerMask _groundLayer;
         [SerializeField] private int _detectorCount = 3;
         [SerializeField] private float _detectionRayLength = 0.1f;
         [SerializeField] [Range(0.1f, 0.3f)] private float _rayBuffer = 0.1f; // Prevents side detectors hitting the ground
 
         private RayRange _raysUp, _raysRight, _raysDown, _raysLeft;
-        private bool _colUp, _colRight, _colDown, _colLeft;
+        private bool _colUp, _colRight, _colDown, _colLeft, _wallCheck;
 
         private float _timeLeftGrounded;
 
@@ -98,6 +98,14 @@ namespace TarodevController {
             }
 
             _colDown = groundedCheck;
+
+            _wallCheck = (_colLeft || _colRight) && Input.X != 0 && !groundedCheck;
+            if (_wallCheck)
+            {
+                _coyoteUsable = true; // Only trigger when first touching
+                LandingThisFrame = true;
+            }
+
 
             // The rest
             _colUp = RunDetection(_raysUp);
@@ -203,6 +211,7 @@ namespace TarodevController {
         [Header("GRAVITY")] [SerializeField] private float _fallClamp = -40f;
         [SerializeField] private float _minFallSpeed = 80f;
         [SerializeField] private float _maxFallSpeed = 120f;
+        [SerializeField] private float _wallSlideClamp = -15f;
         private float _fallSpeed;
 
         private void CalculateGravity()
@@ -215,13 +224,23 @@ namespace TarodevController {
             else
             {
                 // Add downward force while ascending if we ended the jump early
+
                 var fallSpeed = _endedJumpEarly && _currentVerticalSpeed > 0 ? _fallSpeed * _jumpEndEarlyGravityModifier : _fallSpeed;
 
                 // Fall
                 _currentVerticalSpeed -= fallSpeed * Time.deltaTime;
 
+
                 // Clamp
-                if (_currentVerticalSpeed < _fallClamp) _currentVerticalSpeed = _fallClamp;
+                if (!_wallCheck)
+                {
+                    if (_currentVerticalSpeed < _fallClamp) _currentVerticalSpeed = _fallClamp;
+                }
+                else
+                {
+                    if (_currentVerticalSpeed < _wallSlideClamp) _currentVerticalSpeed = _wallSlideClamp;
+                }
+
             }
         }
 
@@ -234,12 +253,14 @@ namespace TarodevController {
         [SerializeField] private float _coyoteTimeThreshold = 0.1f;
         [SerializeField] private float _jumpBuffer = 0.1f;
         [SerializeField] private float _jumpEndEarlyGravityModifier = 3;
+        [SerializeField] private float _wallJumpForce = -40f;
         private bool _coyoteUsable;
         private bool _endedJumpEarly = true;
         private float _apexPoint; // Becomes 1 at the apex of a jump
         private float _lastJumpPressed;
         private bool CanUseCoyote => _coyoteUsable && !_colDown && _timeLeftGrounded + _coyoteTimeThreshold > Time.time;
         private bool HasBufferedJump => _colDown && _lastJumpPressed + _jumpBuffer > Time.time;
+        private bool HasBufferedWallJump => (_colRight || _colLeft) && _lastJumpPressed + _jumpBuffer > Time.time;
 
         private void CalculateJumpApex()
         {
@@ -265,6 +286,16 @@ namespace TarodevController {
                 _coyoteUsable = false;
                 _timeLeftGrounded = float.MinValue;
                 JumpingThisFrame = true;
+            }
+            else if(Input.JumpDown && _wallCheck || HasBufferedWallJump)
+            {
+                _currentVerticalSpeed = _jumpHeight;
+                _currentHorizontalSpeed = _wallJumpForce * -Input.X;
+                _endedJumpEarly = false;
+                _coyoteUsable = false;
+                _timeLeftGrounded = float.MinValue;
+                JumpingThisFrame = true;
+
             }
             else
             {
