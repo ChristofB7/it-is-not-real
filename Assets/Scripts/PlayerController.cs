@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace TarodevController {
@@ -12,12 +13,25 @@ namespace TarodevController {
     /// </summary>
     public class PlayerController : MonoBehaviour, IPlayerController {
         // Public for external hooks
+
+
         public Vector3 Velocity { get; private set; }
         public FrameInput Input { get; private set; }
         public bool JumpingThisFrame { get; private set; }
         public bool LandingThisFrame { get; private set; }
         public Vector3 RawMovement { get; private set; }
         public bool Grounded => _colDown;
+        private bool Running => Input.X != 0;
+        private bool Jumping => Input.JumpDown;
+        private bool Falling => !Grounded && !Jumping;
+
+        public SpriteRenderer redSprite, blueSprite;
+        public Animator redAnimator, blueAnimator;
+
+        private bool Grabbing => _wallCheck;
+
+        //public TextMeshProUGUI grounded,running,jumping,falling,grabbing;
+
 
         private Vector3 _lastPosition;
         private float _currentHorizontalSpeed, _currentVerticalSpeed;
@@ -45,10 +59,44 @@ namespace TarodevController {
                 CalculateJump(); // Possibly overrides vertical
 
                 MoveCharacter(); // Actually perform the axis movement
+                AnimateCharacter();
+                //UpdateTexts();
             }
 
         }
 
+        private void AnimateCharacter()
+        {
+            if (Input.X > 0)
+            {
+                redSprite.flipX = false;
+                blueSprite.flipX = false;
+            }
+            else if (Input.X < 0)
+            {
+                redSprite.flipX = true;
+                blueSprite.flipX = true;
+            }
+
+            redAnimator.SetBool("Grounded", Grounded);
+            redAnimator.SetBool("Grabbing", Grabbing);
+            redAnimator.SetBool("Running", Running);
+            redAnimator.SetBool("BoolFalling", Falling);
+            blueAnimator.SetBool("Grounded", Grounded);
+            blueAnimator.SetBool("Grabbing", Grabbing);
+            blueAnimator.SetBool("Running", Running);
+            blueAnimator.SetBool("BoolFalling", Falling);
+        }
+
+        /*        private void UpdateTexts()
+                {
+                    grounded.text = "grounded: " + Grounded;
+                    running.text = "running: " + Running;
+                    jumping.text = "jumping: " + Jumping;
+                    falling.text = "falling: " + Falling;
+                    grabbing.text = "grabbing: " + Grabbing;
+                }
+        */
 
         #region Gather Input
 
@@ -199,6 +247,8 @@ namespace TarodevController {
                 // Apply bonus at the apex of a jump
                 var apexBonus = Mathf.Sign(Input.X) * _apexBonus * _apexPoint;
                 _currentHorizontalSpeed += apexBonus * Time.deltaTime;
+
+                
             }
             else
             {
@@ -237,6 +287,7 @@ namespace TarodevController {
                 var fallSpeed = _endedJumpEarly && _currentVerticalSpeed > 0 ? _fallSpeed * _jumpEndEarlyGravityModifier : _fallSpeed;
 
                 // Fall
+                
                 _currentVerticalSpeed -= fallSpeed * Time.deltaTime;
 
 
@@ -290,6 +341,9 @@ namespace TarodevController {
             // Jump if: grounded or within coyote threshold || sufficient jump buffer
             if (Input.JumpDown && CanUseCoyote || HasBufferedJump)
             {
+                redAnimator.SetTrigger("Jumping");
+                blueAnimator.SetTrigger("Jumping");
+
                 _currentVerticalSpeed = _jumpHeight;
                 _endedJumpEarly = false;
                 _coyoteUsable = false;

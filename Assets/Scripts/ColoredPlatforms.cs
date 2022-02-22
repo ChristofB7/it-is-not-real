@@ -8,10 +8,11 @@ public class ColoredPlatforms : MonoBehaviour
     public PlayerController controller;
     public LayerMask[] grounds;
     public Sprite[] sprites;
-    public SpriteRenderer spriteRenderer;
+    public GameObject redRenderer,blueRenderer;
     public float swapTime = 3f;
 
     public int spriteCounter = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,8 +28,19 @@ public class ColoredPlatforms : MonoBehaviour
         for(; ; )
         {
             spriteCounter = (spriteCounter+1)%sprites.Length;
-            spriteRenderer.sprite = sprites[spriteCounter];
+            bool blue = spriteCounter % 2 == 0;
 
+            if (blue)
+            {
+                blueRenderer.SetActive(true);
+                redRenderer.SetActive(false);
+            }
+            else
+            {
+                blueRenderer.SetActive(false);
+                redRenderer.SetActive(true);
+                
+            }
             controller._groundLayer = grounds[spriteCounter];
 
             yield return new WaitForSeconds(swapTime);

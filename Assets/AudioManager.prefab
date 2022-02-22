@@ -846,7 +846,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: bf0912c6068e57d48ab7ae7f00f15dff, type: 2}
   themeSource: {fileID: 4584800393407793037}
-  themeClip: {fileID: 0}
+  themeClip: {fileID: 8300000, guid: 01f4915657f4f7d4cb6886774a565d66, type: 3}
 --- !u!114 &1829853499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,7 +903,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: bf0912c6068e57d48ab7ae7f00f15dff, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 54158bb6292e08940b6823520e8d1a5b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 01f4915657f4f7d4cb6886774a565d66, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
