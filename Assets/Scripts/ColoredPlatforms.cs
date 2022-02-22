@@ -8,7 +8,7 @@ public class ColoredPlatforms : MonoBehaviour
     public PlayerController controller;
     public LayerMask[] grounds;
     public Sprite[] sprites;
-    public GameObject redRenderer,blueRenderer;
+    public SpriteRenderer redRenderer,blueRenderer;
     public float swapTime = 3f;
 
     public int spriteCounter = 0;
@@ -32,14 +32,14 @@ public class ColoredPlatforms : MonoBehaviour
 
             if (blue)
             {
-                blueRenderer.SetActive(true);
-                redRenderer.SetActive(false);
+                blueRenderer.enabled = true;
+                redRenderer.enabled = false;
             }
             else
             {
-                blueRenderer.SetActive(false);
-                redRenderer.SetActive(true);
-                
+                blueRenderer.enabled = false;
+                redRenderer.enabled = true;
+
             }
             controller._groundLayer = grounds[spriteCounter];
 
