@@ -9,12 +9,14 @@ public class PlatformImage : MonoBehaviour
     private ColoredPlatforms coloredPlatforms;
     public Sprite[] sprites;
     private Image image;
+    private SpriteRenderer sr;
     private float spriteCounter;
     // Start is called before the first frame update
     void Start()
     {
         coloredPlatforms = FindObjectOfType<ColoredPlatforms>();
         image = gameObject.GetComponent<Image>();
+        sr = gameObject.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -28,8 +30,16 @@ public class PlatformImage : MonoBehaviour
 
     private void ChangeSprite()
     {
-        spriteCounter = coloredPlatforms.spriteCounter;
-        image.sprite = sprites[coloredPlatforms.spriteCounter];
+        if (image != null)
+        {
+            spriteCounter = coloredPlatforms.spriteCounter;
+            image.sprite = sprites[coloredPlatforms.spriteCounter];
+        }
+        else if(sr != null)
+        {
+            spriteCounter = coloredPlatforms.spriteCounter;
+            sr.sprite = sprites[coloredPlatforms.spriteCounter];
+        }
 
     }
 }

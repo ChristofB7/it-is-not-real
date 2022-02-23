@@ -12,6 +12,7 @@ public class ColoredPlatforms : MonoBehaviour
     public float swapTime = 3f;
 
     public int spriteCounter = 0;
+    ColorSwapper[] list;
 
 
     // Start is called before the first frame update
@@ -19,6 +20,7 @@ public class ColoredPlatforms : MonoBehaviour
     {
         controller = FindObjectOfType<PlayerController>();
         StartCoroutine(SwapColors());
+
         
 
     }
@@ -42,6 +44,12 @@ public class ColoredPlatforms : MonoBehaviour
 
             }
             controller._groundLayer = grounds[spriteCounter];
+
+            list = FindObjectsOfType<ColorSwapper>();
+            foreach (ColorSwapper color in list)
+            {
+                color.ChangeColor();
+            }
 
             yield return new WaitForSeconds(swapTime);
         }
