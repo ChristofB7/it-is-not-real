@@ -126,6 +126,9 @@ namespace TarodevController {
         [SerializeField] [Range(0.1f, 0.3f)] private float _rayBuffer = 0.1f; // Prevents side detectors hitting the ground
 
         private RayRange _raysUp, _raysRight, _raysDown, _raysLeft;
+
+        public bool CantWall;
+
         private bool _colUp, _colRight, _colDown, _colLeft, _wallCheck;
 
         private float _timeLeftGrounded;

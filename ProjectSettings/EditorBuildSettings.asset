@@ -9,9 +9,42 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Level.unity
-    guid: 8b57e809659ac5d46a0ee50b8b123d1a
-  - enabled: 1
     path: Assets/Scenes/Level 1.unity
     guid: aecfd72ad8dc4b446965526d2953d386
+  - enabled: 1
+    path: Assets/Scenes/Level 2.unity
+    guid: 928e62ee825e7174eaa34f8fb42316d9
+  - enabled: 1
+    path: Assets/Scenes/Level 3.unity
+    guid: cbceb23b0083e0c458312ac4e342984c
+  - enabled: 1
+    path: Assets/Scenes/Level 4.unity
+    guid: 2495033ce5b0c4b46871b5d491eb86c7
+  - enabled: 1
+    path: Assets/Scenes/Level 5.unity
+    guid: 4397c6f71972c5245aee12185becd450
+  - enabled: 1
+    path: Assets/Scenes/Level 6.unity
+    guid: aca0356abec00ee4ea632df0e69c32d6
+  - enabled: 1
+    path: Assets/Scenes/Zevel 1.unity
+    guid: 56dbb5767982f19419d38a5cad0f01c1
+  - enabled: 1
+    path: Assets/Scenes/Zevel2.unity
+    guid: 9a40689e88fa515499d56cc886fc1675
+  - enabled: 1
+    path: Assets/Scenes/Zevel3.unity
+    guid: 031ce30162bba6249b9339c14af48775
+  - enabled: 1
+    path: Assets/Scenes/Zevel4.unity
+    guid: 339e02a91a4b53b47bdebb49b281236a
+  - enabled: 1
+    path: Assets/Scenes/Zevel5.unity
+    guid: 9239696e5181d4b4799d299377ac8d68
+  - enabled: 1
+    path: Assets/Scenes/Zevel6.unity
+    guid: 2ea7268a3fb34734d9c87365c629105b
+  - enabled: 1
+    path: Assets/Scenes/End.unity
+    guid: eb93b7f1f41bbf1429cdc2749e97879e
   m_configObjects: {}
