@@ -6,9 +6,11 @@ using UnityEngine.SceneManagement;
 public class EndScreen : MonoBehaviour
 {
 
+
     public void returnToMenu()
     {
-        SceneManager.LoadScene(0);
+        Destroy(GameObject.Find("AudioManager"));
+        SceneManager.LoadScene("MainMenu",LoadSceneMode.Additive);
     }
 
     // Start is called before the first frame update
