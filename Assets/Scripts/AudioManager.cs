@@ -9,7 +9,7 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
     public AudioMixer audioMixer;
-    [SerializeField] AudioSource themeSource;
+    [SerializeField] AudioSource themeSource, triumph, darkTheme;
     [SerializeField] AudioClip themeClip;
 
     public static AudioManager instance;
@@ -37,5 +37,19 @@ public class AudioManager : MonoBehaviour
          
     }
 
+    public void PlayTriumph()
+    {
+        float volume = PlayerPrefs.GetFloat("volume", 0.5f);
+        audioMixer.SetFloat("volume", Mathf.Log10(volume) * 20);
+        themeSource.Stop();
+        triumph.Play();
+    }
+    public void PlayDarkTheme()
+    {
+        float volume = PlayerPrefs.GetFloat("volume", 0.5f);
+        audioMixer.SetFloat("volume", Mathf.Log10(volume) * 20);
+        triumph.Stop();
+        darkTheme.Play();
+    }
 
 }
